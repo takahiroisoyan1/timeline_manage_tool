@@ -38,6 +38,25 @@ function App() {
   };
 
 
+  // タスクを編集する関数
+
+
+  const handleStatusChange = (taskId, newStatus) => {
+    fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then(response => response.json())
+      .then(updatedTask => {
+        setTasks(tasks.map(task => 
+          task.task_id === updatedTask.task_id ? updatedTask : task
+        ));
+      })
+      .catch(error => console.error('Error:', error));
+  };
+
+
   return (
     <div className="App">
       <h1>就活タスク管理ツール</h1>
@@ -68,7 +87,15 @@ function App() {
           <li key={task.task_id}>
             <strong>企業名:</strong> {task.company_name} | 
             <strong> 締切日:</strong> {task.deadline} | 
-            <strong> 状態:</strong> {['未着手', '進行中', '完了'][task.status]}
+            <strong> 状態:</strong> {['未着手', '進行中', '完了'][task.status]} |
+            <select 
+              value={task.status} 
+              onChange={(e) => handleStatusChange(task.task_id, e.target.value)}
+            >
+              <option value="0">未着手</option>
+              <option value="1">進行中</option>
+              <option value="2">完了</option>
+            </select>
           </li>
         ))}
       </ul>
