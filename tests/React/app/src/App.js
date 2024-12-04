@@ -9,6 +9,7 @@ function App() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editedCompanyName, setEditedCompanyName] = useState("");
   const [editedDeadline, setEditedDeadline] = useState("");
+  const [editedStatus, setEditedStatus] = useState("0");
 
   // タスクを取得する関数
   useEffect(() => {
@@ -73,6 +74,7 @@ function App() {
     setEditingTaskId(task.task_id);
     setEditedCompanyName(task.company_name);
     setEditedDeadline(task.deadline);
+    setEditedStatus(task.status);
   };
 
   const handleSaveEdit = (taskId) => {
@@ -82,7 +84,7 @@ function App() {
       body: JSON.stringify({
         company_name: editedCompanyName,
         deadline: editedDeadline,
-        status: tasks.find((task) => task.task_id === taskId).status,
+        status: editedStatus,
       }),
     })
       .then((response) => response.json())
@@ -134,6 +136,14 @@ function App() {
                   value={editedDeadline}
                   onChange={(e) => setEditedDeadline(e.target.value)}
                 />
+                <select
+                  value={editedStatus}
+                  onChange={(e) => setEditedStatus(e.target.value)}
+                >
+                  <option value="0">未着手</option>
+                  <option value="1">進行中</option>
+                  <option value="2">完了</option>
+                </select>
                 <button onClick={() => handleSaveEdit(task.task_id)}>
                   保存
                 </button>
@@ -147,16 +157,6 @@ function App() {
                 <strong> 締切日:</strong> {task.deadline} |
                 <strong> 状態:</strong>{" "}
                 {["未着手", "進行中", "完了"][task.status]} |
-                <select
-                  value={task.status}
-                  onChange={(e) =>
-                    handleStatusChange(task.task_id, e.target.value)
-                  }
-                >
-                  <option value="0">未着手</option>
-                  <option value="1">進行中</option>
-                  <option value="2">完了</option>
-                </select>
                 <button onClick={() => handleEditClick(task)}>編集</button>
                 <button onClick={() => handleDelete(task.task_id)}>削除</button>
               </>
