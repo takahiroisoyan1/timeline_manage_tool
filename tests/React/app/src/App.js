@@ -68,7 +68,7 @@ function App() {
           <li key={task.task_id}>
             <strong>企業名:</strong> {task.company_name} | 
             <strong> 締切日:</strong> {task.deadline} | 
-            <strong> 状態:</strong> {task.status}
+            <strong> 状態:</strong> {['未着手', '進行中', '完了'][task.status]}
           </li>
         ))}
       </ul>
