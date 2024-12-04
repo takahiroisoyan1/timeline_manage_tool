@@ -1,9 +1,7 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useEffect, useState } from 'react';
+import './App.css';
 
 function App() {
-
   const [tasks, setTasks] = useState([]);
   const [companyName, setCompanyName] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -11,15 +9,13 @@ function App() {
 
   // タスクを取得する関数
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/tasks')  // バックエンドのエンドポイント
+    fetch('http://127.0.0.1:5000/tasks')
       .then(response => response.json())
       .then(data => setTasks(data))
       .catch(error => console.error('Error:', error));
   }, []);
 
   // タスクを追加する関数
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -35,12 +31,10 @@ function App() {
 
     setCompanyName('');
     setDeadline('');
+    setStatus('0');
   };
 
-
-  // タスクを編集する関数
-
-
+  // タスクの状態を変更する関数
   const handleStatusChange = (taskId, newStatus) => {
     fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
       method: 'PUT',
@@ -55,7 +49,6 @@ function App() {
       })
       .catch(error => console.error('Error:', error));
   };
-
 
   return (
     <div className="App">
