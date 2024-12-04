@@ -1,23 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+
+  const [tasks, setTasks] = useState([]);
+
+  // タスクを取得する関数
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/tasks')  // バックエンドのエンドポイント
+      .then(response => response.json())
+      .then(data => setTasks(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>就活タスク管理ツール</h1>
+      <ul>
+        {tasks.map(task => (
+          <li key={task.task_id}>
+            <strong>企業名:</strong> {task.company_name} | 
+            <strong> 締切日:</strong> {task.deadline} | 
+            <strong> 状態:</strong> {task.status}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
