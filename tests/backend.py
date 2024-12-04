@@ -23,13 +23,15 @@ def add_task():
 
 @app.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
-    global tasks
-    for task in tasks:
-        if task['task_id'] == task_id:
-            data = request.json
-            task['status'] = data.get('status', task['status'])
-            return jsonify(task)
-    return jsonify({'error': 'タスクが見つかりません'}), 404
+    task = next((task for task in tasks if task.get('task_id') == task_id), None)
+    if not task:
+        return jsonify({'error': 'タスクが見つかりません'}), 404
+
+    data = request.json
+    task['company_name'] = data.get('company_name', task['company_name'])
+    task['deadline'] = data.get('deadline', task['deadline'])
+    task['status'] = data.get('status', task['status'])  # 状態も更新
+    return jsonify(task)
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
