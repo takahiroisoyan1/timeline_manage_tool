@@ -5,6 +5,9 @@ import React, { useEffect, useState } from 'react';
 function App() {
 
   const [tasks, setTasks] = useState([]);
+  const [companyName, setCompanyName] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [status, setStatus] = useState('0');
 
   // タスクを取得する関数
   useEffect(() => {
@@ -14,10 +17,44 @@ function App() {
       .catch(error => console.error('Error:', error));
   }, []);
 
-  
+  // タスクを追加する関数
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newTask = { company_name: companyName, deadline, status };
+    fetch('http://127.0.0.1:5000/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTask),
+    })
+      .then(response => response.json())
+      .then(data => setTasks([...tasks, data]))
+      .catch(error => console.error('Error:', error));
+
+    setCompanyName('');
+    setDeadline('');
+  };
+
+
   return (
     <div className="App">
       <h1>就活タスク管理ツール</h1>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          placeholder="企業名" 
+          value={companyName} 
+          onChange={(e) => setCompanyName(e.target.value)} 
+        />
+        <input 
+          type="date" 
+          value={deadline} 
+          onChange={(e) => setDeadline(e.target.value)} 
+        />
+        <button type="submit">タスクを追加</button>
+      </form>
       <ul>
         {tasks.map(task => (
           <li key={task.task_id}>
