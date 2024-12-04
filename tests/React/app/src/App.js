@@ -50,6 +50,22 @@ function App() {
       .catch(error => console.error('Error:', error));
   };
 
+
+
+  // タスク削除用の関数を追加
+const handleDelete = (taskId) => {
+  fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+    method: 'DELETE',
+  })
+    .then(() => {
+      // タスクを削除した後、フロントエンドの状態も更新する
+      setTasks(tasks.filter(task => task.task_id !== taskId));
+    })
+    .catch(error => console.error('Error:', error));
+};
+
+
+
   return (
     <div className="App">
       <h1>就活タスク管理ツール</h1>
@@ -89,6 +105,8 @@ function App() {
               <option value="1">進行中</option>
               <option value="2">完了</option>
             </select>
+            {/* 削除ボタンを追加 */}
+            <button onClick={() => handleDelete(task.task_id)}>削除</button>
           </li>
         ))}
       </ul>
