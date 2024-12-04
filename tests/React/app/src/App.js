@@ -53,6 +53,14 @@ function App() {
           value={deadline} 
           onChange={(e) => setDeadline(e.target.value)} 
         />
+        <select 
+          value={status} 
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="0">未着手</option>
+          <option value="1">進行中</option>
+          <option value="2">完了</option>
+        </select>
         <button type="submit">タスクを追加</button>
       </form>
       <ul>
